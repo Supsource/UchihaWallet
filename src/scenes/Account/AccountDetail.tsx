@@ -1,9 +1,18 @@
-import React, { Component } from 'react'
+// AccountDetail.tsx
+import React from 'react';
+import { Account } from '../../models/Account';
 
-export default class AccountDetail extends Component {
-  render() {
-    return (
-      <div>AccountDetail</div>
-    )
-  }
+interface AccountDetailProps {
+  account: Account;
 }
+
+const AccountDetail: React.FC<AccountDetailProps> = ({ account }) => {
+  return (
+    <div>
+      <h2>Account Details</h2>
+      {/* Render other account details here */}
+    </div>
+  );
+};
+
+export default AccountDetail;
