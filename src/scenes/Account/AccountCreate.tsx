@@ -8,34 +8,42 @@ const AccountCreate: React.FC = () => {
 
     const createAccount = () => {
         const keys = generateKeys();
-        console.log({keys});
+        console.log({ keys });
     };
 
-    const recoverAccount = () =>{
+    const recoverAccount = () => {
         setShowSeedInput(true);
     }
 
-    const handelSeedPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSeedPhraseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSeedPhrase(event.target.value);
     }
 
-    const handelSeedPhraseSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSeedPhraseSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const keys = generateKeys(seedPhrase);
-        console.log({keys});
+        console.log({ keys });
     }
 
     return (
-        <div>
-            <button onClick={createAccount}>Create Account</button>
-            <button onClick={recoverAccount}>Recover Account</button>
+        <div className="container mt-4">
+            <div className="d-flex justify-content-around">
+                <button className="btn btn-primary" onClick={createAccount}>Create Account</button>
+                <button className="btn btn-secondary" onClick={recoverAccount}>Recover Account</button>
+            </div>
             {showSeedInput && (
-                <form onSubmit={handelSeedPhraseSubmit}>
-                <label>
-                    Seed Phrase: 
-                    <input type="text" value={seedPhrase} onChange={handelSeedPhraseChange} />
-                </label>
-                <input type="submit" value="submit"/>
+                <form onSubmit={handleSeedPhraseSubmit} className="mt-4">
+                    <div className="form-group">
+                        <label htmlFor="seedPhraseInput">Seed Phrase:</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="seedPhraseInput"
+                            value={seedPhrase}
+                            onChange={handleSeedPhraseChange}
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-success mt-2">Submit</button>
                 </form>
             )}
         </div>
