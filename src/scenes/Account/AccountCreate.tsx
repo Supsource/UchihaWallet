@@ -1,10 +1,11 @@
+import { generateKeys } from '../../utils/AccountUtils';
 import React from 'react';
 
 const AccountCreate: React.FC = () => {
-    // Define the createAccount function
     const createAccount = () => {
-        console.log('Account creation process initiated');
-        // Add your account creation logic here
+        const keys = generateKeys();
+        console.log({keys});
+
     };
 
     return (
