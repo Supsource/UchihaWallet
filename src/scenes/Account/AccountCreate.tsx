@@ -23,7 +23,7 @@ function AccountCreate() {
 
   const recoverAccount = useCallback(
     async (recoveryPhrase: string) => {
-      const result = await generateAccount(recoveryPhrase);
+      const result = generateAccount(recoveryPhrase);
       setAccount(result.account);
 
       if (localStorage.getItem(recoveryPhraseKeyName) !== recoveryPhrase) {
@@ -42,7 +42,7 @@ function AccountCreate() {
   }, [recoverAccount]);
 
   async function createAccount() {
-    const result = await generateAccount();
+    const result = generateAccount();
     setAccount(result.account);
   }
 
