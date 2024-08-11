@@ -1,5 +1,7 @@
 export interface Account {
-    privateKey: string,
-    address: string,
-    balance: string,
-}
+    publicKey: string;
+    secretKey: Uint8Array;
+    privateKey?: string;
+    address?: string;
+    balance?: number;
+  }
