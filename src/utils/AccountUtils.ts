@@ -1,49 +1,26 @@
-// import { ethers } from "ethers";
-
-// export const generateKeys = (seedPhrase?: string) => {
-//     let wallet: ethers.Wallet;
-
-//     if(seedPhrase){
-//         wallet = ethers.Wallet.fromMnemonic(seedPhrase);
-//     }else{
-//         wallet = ethers.Wallet.createRandom();
-//         seedPhrase = wallet.mnemonic.phrase;
-//     }
-
-//     const privateKey = wallet.privateKey;
-//     const address = wallet.address;
-
-
-
-//     return {seedPhrase, privateKey, address};
-// }    
-import { Wallet } from 'ethers';
+import { Keypair } from '@solana/web3.js';
 import { Account } from '../models/Account';
 
-export function generateAccount(seedPhrase: string = "", index: number = 0): 
-{ account: Account, seedPhrase: string } {
-  let wallet: Wallet;
 
-  // If the seed phrase is not provided, generate a random mnemonic using a CSPRNG
-  if (seedPhrase === "") {
-    seedPhrase = Wallet.createRandom().mnemonic.phrase;
+export const generateAccount = (recoveryPhrase?: string): { account: Account } => {
+  let keypair: Keypair;
+
+  if (recoveryPhrase) {
+    const seed = Uint8Array.from(Buffer.from(recoveryPhrase, 'hex')); // Assuming hex encoding
+    if (seed.length < 32) {
+      throw new Error('Recovery phrase is too short. It must be at least 32 bytes.');
+    }
+    keypair = Keypair.fromSeed(seed.slice(0, 32));
+  } else {
+    // Generate a new keypair
+    keypair = Keypair.generate();
   }
 
-  // If the seed phrase does not contain spaces, it is likely a mnemonic
-  wallet = (seedPhrase.includes(" ")) ? Wallet.fromMnemonic(seedPhrase, `m/44'/60'/0'/0/${index}`) : 
-  new Wallet(seedPhrase);
+  return {
+    account: {
+      publicKey: keypair.publicKey.toBase58(),
+      secretKey: keypair.secretKey,
+    },
+  };
+};
 
-  const { address } = wallet;
-  const account = { address, privateKey: wallet.privateKey, balance: "0" };
-
-  // If the seedphrase does not include spaces then it's actually a private key, so return a blank string.
-  return { account, seedPhrase: seedPhrase.includes(" ")? seedPhrase : "" };
-}
-
-export function shortenAddress(str: string, numChars: number=4) {
-  return `${str.substring(0, numChars)}...${str.substring(str.length - numChars)}`;
-}
-
-export function toFixedIfNecessary( value: string, decimalPlaces: number = 2 ){
-  return +parseFloat(value).toFixed( decimalPlaces );
-}
